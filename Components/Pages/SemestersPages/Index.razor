@@ -1,0 +1,26 @@
+﻿@page "/semesters"
+
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using BlazorApp01.Models
+@inject IDbContextFactory<BlazorApp01.Data.ApplicationDbContext> DbFactory
+
+<PageTitle>Semesters</PageTitle>
+
+<h1>Semesters</h1>
+
+<p>
+    <a href="semesters/create" class="btn btn-success"> Create New Semesters </a>
+</p>
+
+<QuickGrid Class="table" Items="DbFactory.CreateDbContext().Semesters">
+    <PropertyColumn Property="semesters => semesters.Name" />
+    <PropertyColumn Property="semesters => semesters.StartDate "Title=" Start Date" Format="dd/MM/yyyy"/>
+    <PropertyColumn Property="semesters => semesters.StartDate " Title=" End Date" Format="dd/MM/yyyy"/>
+
+    <TemplateColumn Context="semesters">
+        <a class="mx-1 btn btn-outline-success" href="@($"semesters/edit?id={semesters.Id}")">Edit</a> 
+        <a class="mx-1 btn btn-info" href="@($"semesters/details?id={semesters.Id}")">Details</a> 
+        <a class="mx-1 btn btn-danger" href="@($"semesters/delete?id={semesters.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
