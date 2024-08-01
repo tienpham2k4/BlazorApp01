@@ -27,6 +27,19 @@
             <h2>Create a new account.</h2>
             <hr />
             <ValidationSummary class="text-danger" role="alert" />
+
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.Code" class="form-control" aria-required="true" placeholder="code" />
+                <label for="code">Student's Code</label>
+                <ValidationMessage For="() => Input.Code" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.Name" class="form-control" aria-required="true" placeholder="name" />
+                <label for="name">Student's Name</label>
+                <ValidationMessage For="() => Input.Name" class="text-danger" />
+            </div>
+                    
+
             <div class="form-floating mb-3">
                 <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label for="email">Email</label>
@@ -106,7 +119,12 @@
     {
         try
         {
-            return Activator.CreateInstance<ApplicationUser>();
+            return new ApplicationUser
+
+                {
+                    Name = Input.Name,
+                    Code = Input.Code
+                };
         }
         catch
         {
@@ -126,6 +144,14 @@
 
     private sealed class InputModel
     {
+        [Required]      
+        [Display(Name = "Code")]
+        public string Code { get; set; } = "";
+        [Required]     
+        [Display(Name = "Name")]
+        public string Name { get; set; } = "";
+
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
