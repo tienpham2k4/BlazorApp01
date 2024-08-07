@@ -39,18 +39,33 @@ else
                     <ValidationMessage For="() => Courses.EndDate" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="semesterid" class="form-label">SemesterId:</label>
-                    <InputNumber id="semesterid" @bind-Value="Courses.SemesterId" class="form-control" />
+                    <label for="semesterid" class="form-label">Semester Name:</label>
+                    <InputSelect id="semesterid" @bind-Value="Courses.SemesterId" class="form-control">
+                        @foreach (var semester in Semesters)
+                        {
+                            <option value="@semester.Id">@semester.Name</option>
+                        }
+                    </InputSelect>
                     <ValidationMessage For="() => Courses.SemesterId" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="subjectid" class="form-label">SubjectId:</label>
-                    <InputNumber id="subjectid" @bind-Value="Courses.SubjectId" class="form-control" />
+                    <label for="subjectid" class="form-label">Subject Name:</label>
+                    <InputSelect id="subjectid" @bind-Value="Courses.SubjectId" class="form-control">
+                        @foreach (var subject in Subjects)
+                        {
+                            <option value="@subject.Id">@subject.Name</option>
+                        }
+                    </InputSelect>
                     <ValidationMessage For="() => Courses.SubjectId" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="lectureid" class="form-label">LectureId:</label>
-                    <InputText id="lectureid" @bind-Value="Courses.LectureId" class="form-control" />
+                    <label for="lectureid" class="form-label">Lecture Name:</label>
+                    <InputSelect id="lectureid" @bind-Value="Courses.LectureId" class="form-control">
+                        @foreach (var lecture in Lectures)
+                        {
+                            <option value="@lecture.Id">@lecture.Name</option>
+                        }
+                    </InputSelect>
                     <ValidationMessage For="() => Courses.LectureId" class="text-danger" />
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
@@ -60,7 +75,7 @@ else
 }
 
 <div>
-    <a href="/courses">Back to List</a>
+    <a class="btn btn-success mt-3" href="/courses">Back to List</a>
 </div>
 
 @code {
@@ -69,12 +84,16 @@ else
 
     [SupplyParameterFromForm]
     public Courses? Courses { get; set; }
-
+    public List<Semesters> Semesters { get; set; } = new();
+    public List<Subjects> Subjects { get; set; } = new();
+    public List<BlazorApp01.Data.ApplicationUser> Lectures { get; set; } = new();
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
         Courses ??= await context.Courses.FirstOrDefaultAsync(m => m.Id == Id);
-
+        Lectures = await context.ApplicationUsers.ToListAsync();
+        Semesters = await context.Semesters.ToListAsync();
+        Subjects = await context.Subjects.ToListAsync();
         if (Courses is null)
         {
             NavigationManager.NavigateTo("notfound");
