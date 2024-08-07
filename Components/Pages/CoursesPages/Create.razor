@@ -22,23 +22,33 @@
                 <ValidationMessage For="() => Courses.Name" class="text-danger" /> 
             </div>        
             <div class="mb-3">
-                <label for="startdate" class="form-label">StartDate:</label> 
+                <label for="startdate" class="form-label">Start Date:</label> 
                 <InputDate id="startdate" @bind-Value="Courses.StartDate" class="form-control" /> 
                 <ValidationMessage For="() => Courses.StartDate" class="text-danger" /> 
             </div>        
             <div class="mb-3">
-                <label for="enddate" class="form-label">EndDate:</label> 
+                <label for="enddate" class="form-label">End Date:</label> 
                 <InputDate id="enddate" @bind-Value="Courses.EndDate" class="form-control" /> 
                 <ValidationMessage For="() => Courses.EndDate" class="text-danger" /> 
             </div>        
             <div class="mb-3">
-                <label for="semesterid" class="form-label">SemesterId:</label> 
-                <InputNumber id="semesterid" @bind-Value="Courses.SemesterId" class="form-control" /> 
+                <label for="semesterid" class="form-label">Semester Name:</label>
+                <InputSelect id="semesterid" @bind-Value="Courses.SemesterId" class="form-control">
+                    @foreach (var semester in Semesters)
+                    {
+                        <option value="@semester.Id">@semester.Name</option>
+                    }
+                </InputSelect>
                 <ValidationMessage For="() => Courses.SemesterId" class="text-danger" /> 
             </div>        
             <div class="mb-3">
-                <label for="subjectid" class="form-label">SubjectId:</label> 
-                <InputNumber id="subjectid" @bind-Value="Courses.SubjectId" class="form-control" /> 
+                <label for="subjectid" class="form-label">Subject Name:</label>
+                <InputSelect id="subjectid" @bind-Value="Courses.SubjectId" class="form-control">
+                    @foreach (var subject in Subjects)
+                    {
+                        <option value="@subject.Id">@subject.Name</option>
+                    }
+                </InputSelect>
                 <ValidationMessage For="() => Courses.SubjectId" class="text-danger" /> 
             </div>   
                        
@@ -66,13 +76,16 @@
 
     [SupplyParameterFromForm]
     public Courses Courses { get; set; } = new();
-
+    public List<Semesters> Semesters { get; set; } = new();
+    public List<Subjects> Subjects { get; set; } = new();
     public List<BlazorApp01.Data.ApplicationUser> Lectures { get; set; } = new();
     protected override async Task OnInitializedAsync()
 
     {
         using var context = DbFactory.CreateDbContext();
         Lectures = await context.ApplicationUsers.ToListAsync();
+        Semesters = await context.Semesters.ToListAsync();
+        Subjects = await context.Subjects.ToListAsync();
     }
     // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
     public async Task AddCourses()
