@@ -29,15 +29,17 @@
             <ValidationSummary class="text-danger" role="alert" />
 
             <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Code" class="form-control" aria-required="true" placeholder="code" />
-                <label for="code">Student's Code</label>
-                <ValidationMessage For="() => Input.Code" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
                 <InputText @bind-Value="Input.Name" class="form-control" aria-required="true" placeholder="name" />
                 <label for="name">Student's Name</label>
                 <ValidationMessage For="() => Input.Name" class="text-danger" />
             </div>
+
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.Code" class="form-control" aria-required="true" placeholder="code" />
+                <label for="code">Student's Code</label>
+                <ValidationMessage For="() => Input.Code" class="text-danger" />
+            </div>
+           
                     
 
             <div class="form-floating mb-3">

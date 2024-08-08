@@ -10,7 +10,7 @@
 <h1>Courses</h1>
 
 <p>
-    <a class="btn btn-success">Create New</a>
+    <a href="courses/create" class="btn btn-success">Create New</a>
 </p>
 
 <QuickGrid Class="table" Items="DbFactory.CreateDbContext().Courses.Include(m=>m.Semester).Include(m=>m.Subject).Include(m=>m.Lecture)">
