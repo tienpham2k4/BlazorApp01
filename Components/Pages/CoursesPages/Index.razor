@@ -15,8 +15,8 @@
 
 <QuickGrid Class="table" Items="DbFactory.CreateDbContext().Courses.Include(m=>m.Semester).Include(m=>m.Subject).Include(m=>m.Lecture)">
     <PropertyColumn Property="courses => courses.Name" />
-    <PropertyColumn Property="courses => courses.StartDate" />
-    <PropertyColumn Property="courses => courses.EndDate" />
+    <PropertyColumn Property="courses => courses.StartDate" Title="Start Date"/>
+    <PropertyColumn Property="courses => courses.EndDate" Title="End Date"/>
     <PropertyColumn Property="courses => courses.Semester.Name" Title="Semester Name"/>
     <PropertyColumn Property="courses => courses.Subject.Name" Title="Subject Name"/>
     <PropertyColumn Property="courses => courses.Lecture.Name" Title="Lecture Name"/>
