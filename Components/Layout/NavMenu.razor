@@ -1,6 +1,11 @@
 ﻿@implements IDisposable
+@using BlazorApp01.Data
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
 
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject SignInManager<ApplicationUser> SignInManager
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -19,21 +24,20 @@
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
             <NavLink class="nav-link" href="semesters">
                 <i class="fa-solid fa-calendar-days me-3"></i> Semesters
             </NavLink>
         </div>
-         
+
+        @if (isAdmin)
+        {
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="departments">
                     <i class="fa-solid fa-building me-3"></i> Departments
                 </NavLink>
-            </div>        <div class="nav-item px-3">
+            </div>       
+        }
+            <div class="nav-item px-3">
                 <NavLink class="nav-link" href="majors">
                     <i class="fa-solid fa-graduation-cap me-3"></i> Majors
                 </NavLink>
@@ -56,17 +60,7 @@
                 <i class="bi fa-solid fa-graduation-cap"></i> Students
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="auth">
-                <span class="bi bi-lock-nav-menu" aria-hidden="true"></span> Auth Required
-            </NavLink>
-        </div>
+      
 
         <AuthorizeView>
             <Authorized>
@@ -75,15 +69,15 @@
                         <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
                     </NavLink>
                 </div>
+               
                 <div class="nav-item px-3">
-                    <form action="Account/Logout" method="post">
-                        <AntiforgeryToken />
-                        <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                    <form action="Account/Signout">          
                         <button type="submit" class="nav-link">
                             <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
                         </button>
                     </form>
                 </div>
+
             </Authorized>
             <NotAuthorized>
                 <div class="nav-item px-3">
@@ -103,11 +97,22 @@
 
 @code {
     private string? currentUrl;
+    private bool isStudent;
+    private bool isAdmin;
+    private bool isLecture;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        // Check if the user is in the "Student" role
+        isStudent = user.Claims.Any(c => c.Type == "Role" && c.Value == "Student");
+        isAdmin = user.Claims.Any(c => c.Type == "Role" && c.Value == "Admin");
+        isLecture = user.Claims.Any(c => c.Type == "Role" && c.Value == "Lecture");
+
     }
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
@@ -120,5 +125,9 @@
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
-}
+    private void Logout()
+    {
 
+        Console.WriteLine("123123123");
+    }
+}

@@ -44,7 +44,19 @@
                 <label for="phonenumber">Student's Phone Number</label>
                 <ValidationMessage For="() => Input.PhoneNumber" class="text-danger" />
             </div>
-                              
+
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.Address" class="form-control" aria-required="true" placeholder="address" />
+                <label for="address">Student's Address</label>
+                <ValidationMessage For="() => Input.Address" class="text-danger" />
+            </div>
+
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.Sex" class="form-control" aria-required="true" placeholder="sex" />
+                <label for="sex">Student's Sex</label>
+                <ValidationMessage For="() => Input.Sex" class="text-danger" />
+            </div>
+
             <div class="form-floating mb-3">
                 <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label for="email">Email</label>
@@ -130,6 +142,8 @@
                     Name = Input.Name,
                     Code = Input.Code,
                     PhoneNumber = Input.PhoneNumber,
+                    Address = Input.Address,
+                    Sex = Input.Sex,
                     Role = "Student",
                 };
         }
@@ -165,6 +179,14 @@
         [Required]
         [Display(Name = "PhoneNumber")]
         public string PhoneNumber { get; set; } = "";
+
+        [Required]
+        [Display(Name = "Address")]
+        public string Address { get; set; } = "";
+
+        [Required]
+        [Display(Name = "Sex")]
+        public string Sex { get; set; } = "";
 
         [Required]
         [EmailAddress]
